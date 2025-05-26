@@ -112,7 +112,7 @@ Widget buildDateField(
                 onPrimary: Colors.white,
                 onSurface: Colors.black,
               ),
-              dialogTheme: const DialogTheme(backgroundColor: Colors.white),
+              dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
             ),
             child: child!,
           ),
