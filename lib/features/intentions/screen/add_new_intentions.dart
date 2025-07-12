@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:tread256/features/intentions/controller/add_new_intentions_controller.dart';
+import 'package:tread256/core/utils/constants/colors.dart';
+import 'package:tread256/core/utils/constants/image_path.dart';
+import 'package:tread256/features/intentions/controller/intentions_controller.dart';
 import 'package:tread256/features/intentions/widgets/form_fields.dart';
 import 'package:tread256/features/intentions/widgets/header_section.dart';
 import 'package:tread256/features/perosonal_tree/widgets/custom_button.dart';
@@ -24,19 +25,46 @@ class AddNewIntentions extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              HeaderSection(
-                headerText: "Add New Intentions",
-                immagePath: "assets/images/component.png",
-                boxHeight: 10,
+              // HeaderSection(
+              //   headerText: "Add New Intentions",
+              //   immagePath: "assets/images/component.png",
+              //   boxHeight: 10,
+              // ),
+              Center(
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: AssetImage(ImagePath.icon),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "Add New Intentions",
+                      style: TextStyle(fontSize: 20, color: AppColors.primary),
+                    ),
+                  ],
+                ),
               ),
 
               SizedBox(height: 32),
 
-              buildTextField(
+              buildUserSelectionField(
                 controller: controller.personNameController,
+                intentionController: controller,
+                selectedUserId: controller.selectedUserId,
+                searchResults: controller.searchResults,
+                onUserSelected: (user) => controller.selectUser(user),
                 label: 'Name:',
-                hintText: 'Name',
+                hintText: 'Search for a person...',
               ),
+
+              // User search results
+              buildUserSearchResults(
+                controller: controller,
+                onUserSelected: (user) => controller.selectUser(user),
+              ),
+
               SizedBox(height: 16),
 
               buildTextField(
@@ -71,7 +99,10 @@ class AddNewIntentions extends StatelessWidget {
                   'Mental Wellness',
                 ],
                 onChanged: (String? newValue) {
-                  controller.setSelectedTree(newValue ?? '');
+                  if (newValue != null) {
+                    controller.selectedCategory.value = newValue;
+                    controller.update();
+                  }
                 },
               ),
               const SizedBox(height: 16),
@@ -93,13 +124,8 @@ class AddNewIntentions extends StatelessWidget {
               CustomButtom(
                 buttonText: "Save Intention",
                 onPressed: () {
-                  if (controller.dateController.text.isEmpty) {
-                    controller.dateController.text = DateFormat(
-                      'yyyy-MM-ddTHH:mm:ss',
-                    ).format(DateTime.now());
-                  }
+                  print("Button presseed");
                   controller.saveIntention();
-                  Get.back();
                 },
               ),
               SizedBox(height: 20),

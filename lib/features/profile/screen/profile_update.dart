@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tread256/core/common/styles/global_text_style.dart';
 import 'package:tread256/core/utils/constants/colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:tread256/core/common/widgets/shimmer_loading.dart';
 
 class ProfileUpdateScreen extends StatefulWidget {
   const ProfileUpdateScreen({super.key});
@@ -41,10 +44,17 @@ class _ProfileScreenState extends State<ProfileUpdateScreen> {
                   Stack(
                     alignment: Alignment.bottomRight,
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 48,
-                        backgroundImage: NetworkImage(
-                          'https://via.placeholder.com/150', // Replace with actual image URL
+                        child: ClipOval(
+                          child: CachedNetworkImage(
+                            imageUrl: 'https://via.placeholder.com/150',
+                            width: 96,
+                            height: 96,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const ShimmerCircle(size: 96),
+                            errorWidget: (context, url, error) => const Icon(Icons.person, size: 48),
+                          ),
                         ),
                       ),
                       Container(
@@ -69,6 +79,7 @@ class _ProfileScreenState extends State<ProfileUpdateScreen> {
                   Text(
                     'Sarah Anderson',
                     style: getTextStyle(
+                      context: context,
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       color: const Color(0xff2C3E50),
@@ -79,6 +90,7 @@ class _ProfileScreenState extends State<ProfileUpdateScreen> {
                   Text(
                     'Growing Intentional Communities',
                     style: getTextStyle(
+                      context: context,
                       fontSize: 15,
                       color: AppColors.primary,
                       fontWeight: FontWeight.w500,
@@ -157,6 +169,7 @@ class _ProfileScreenState extends State<ProfileUpdateScreen> {
                   title: Text(
                     'Log Out',
                     style: getTextStyle(
+                      context: context,
                       color: const Color(0xFF4F5B67),
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
@@ -212,6 +225,7 @@ class _ProfileScreenState extends State<ProfileUpdateScreen> {
       child: Text(
         text,
         style: getTextStyle(
+          context: context,
           fontSize: 14,
           color: const Color(0xFF4F5B67),
           fontWeight: FontWeight.w500,
@@ -232,6 +246,7 @@ class _ProfileScreenState extends State<ProfileUpdateScreen> {
       obscureText: obscureText,
       keyboardType: keyboardType,
       style: getTextStyle(
+        context: context,
         fontSize: 15,
         color: const Color(0xFF2C3E50),
         fontWeight: FontWeight.w400,
@@ -239,6 +254,7 @@ class _ProfileScreenState extends State<ProfileUpdateScreen> {
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: getTextStyle(
+          context: context,
           fontSize: 15,
           color: const Color(0xFF8F9098),
           fontWeight: FontWeight.w400,

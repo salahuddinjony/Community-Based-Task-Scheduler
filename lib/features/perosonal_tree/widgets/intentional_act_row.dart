@@ -1,76 +1,72 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:tread256/features/perosonal_tree/controller/personal_tree_controller.dart';
 
 class IntentionalActRow extends StatelessWidget {
   final int index;
+  final String title;
+  final bool isCompleted;
+  final String userName;
+  final String userImage;
 
-  IntentionalActRow({super.key, required this.index});
-
-  final PersonalTreeController controller = Get.find<PersonalTreeController>(
-    // tag: 'personal_tree',
-  );
+  const IntentionalActRow({
+    super.key,
+    required this.index,
+    required this.title,
+    required this.isCompleted,
+    required this.userName,
+    required this.userImage,
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (index >= controller.persons.length) {
-      return const SizedBox.shrink();
-    }
-
-    final personData = controller.persons[index];
-    // print("Print all data: ${personData}");
-
-    // Fallback for icons and colors
-    const iconPaths = ["assets/icons/right.png", "assets/icons/right2.png"];
-    const colors = [Colors.green, Colors.red];
-
-    final isPending = [
-      'pending',
-      'panding',
-      'pendng',
-    ].any((word) => personData['tag'].toString().toLowerCase().contains(word));
-
-    final iconPath = isPending ? iconPaths[1] : iconPaths[0];
-
-    final iconColor = isPending ? colors[1] : colors[0];
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundImage:
-                personData['imagePath'] != null &&
-                        personData['imagePath'].isNotEmpty
-                    ? FileImage(File(personData['imagePath']))
-                    : const AssetImage("assets/icons/userprofile.png"),
-          ),
-          const SizedBox(width: 16),
+          CircleAvatar(backgroundImage: NetworkImage(userImage), radius: 20),
+          const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              personData['name'] ?? 'Unknown',
-              style: const TextStyle(fontWeight: FontWeight.bold),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  userName,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  title,
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                ),
+              ],
             ),
           ),
           Expanded(
-            child: Text(
-              personData['relationship'] ?? 'Unknown',
-              style: const TextStyle(),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Text(
+                    isCompleted ? 'Completed' : 'Pending',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                  ),
+                ),
+                SizedBox(
+                  width: isCompleted ? 25 : 25,
+                  height: isCompleted ? 25 : 25,
+                  child: Image.asset(
+                    isCompleted
+                        ? 'assets/icons/right.png'
+                        : 'assets/icons/right2.png',
+                    // fit: BoxFit.contain,
+                  ),
+                ),
+              ],
             ),
-          ),
-          Expanded(
-            child: Text(
-              personData['tag'] ?? 'Unknown',
-              style: const TextStyle(),
-            ),
-          ),
-          SizedBox(
-            width: isPending ? 18 : 25,
-            height: isPending ? 18 : 25,
-            child: Image.asset(iconPath, color: iconColor, fit: BoxFit.contain),
           ),
         ],
       ),

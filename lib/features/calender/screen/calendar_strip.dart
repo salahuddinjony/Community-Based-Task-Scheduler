@@ -53,58 +53,67 @@ class CalendarStrip extends GetView<CalendarController> {
           const SizedBox(height: 10),
           // Days Row
           Obx(() {
-            final days = controller.getDaysInWeek();
+            final Map<int, DateTime> selectedWeekdays =
+                controller.getSelectedDaysGroupedByWeekday();
+
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children:
-                  days.map((day) {
-                    final isMarked = controller.isMarked(day);
-                    final isSelected = controller.selectedDays.contains(day);
-                    return GestureDetector(
-                      onTap: () => controller.toggleSelectDay(day),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            DateFormat(
-                              'E',
-                            ).format(day).substring(0, 3).toUpperCase(),
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
+              children: List.generate(7, (index) {
+                final weekday = (index % 7) + 1; // 1 = Mon, ..., 7 = Sun
+                final selectedDay = selectedWeekdays[weekday];
+
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Weekday label (MON, TUE, ...)
+                    Text(
+                      DateFormat('E')
+                          .format(
+                            DateTime.now().subtract(
+                              Duration(days: DateTime.now().weekday - weekday),
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                          Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: const Color(
-                                0xFFE0F7FA,
-                              ), // Light cyan background
-                              border:
-                                  isSelected
-                                      ? Border.all(color: Colors.blue, width: 2)
-                                      : null, // Blue border for selected days
-                            ),
-                            child: Center(
-                              child:
-                                  (isMarked || isSelected)
-                                      ? const Icon(
-                                        Icons
-                                            .eco, // Leaf icon for marked or selected days
-                                        color: Colors.green,
-                                        size: 20,
-                                      )
-                                      : null,
-                            ),
-                          ),
-                        ],
+                          )
+                          .toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
                       ),
-                    );
-                  }).toList(),
+                    ),
+                    const SizedBox(height: 5),
+
+                    // Selected date box if it exists
+                    GestureDetector(
+                      onTap:
+                          selectedDay != null
+                              ? () => controller.toggleSelectDay(selectedDay)
+                              : null,
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFFE0F7FA),
+                          border:
+                              selectedDay != null
+                                  ? Border.all(color: Colors.blue, width: 2)
+                                  : null,
+                        ),
+                        child: Center(
+                          child:
+                              selectedDay != null
+                                  ? const Icon(
+                                    Icons.eco,
+                                    color: Colors.green,
+                                    size: 20,
+                                  )
+                                  : null,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }),
             );
           }),
         ],

@@ -1,22 +1,29 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:tread256/features/your_everyday_tree/controller/your_everyday_tree_controller.dart';
 
 class CalendarController extends GetxController {
-  var selectedMonthYear = DateTime(2025, 1, 1).obs; // Start at Jan 2025
+  YourEverydayTreeController yourEverydayTreeController = Get.put(
+    YourEverydayTreeController(),
+  );
+
+  var selectedMonthYear = DateTime.now().obs;
   var markedDays = <DateTime>[].obs;
-  var selectedDays = <DateTime>{}.obs; // Set to track selected days
+  var selectedDays = <DateTime>{}.obs;
+  RxString selectedAllDate = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
     updateMarkedDays();
+    yourEverydayTreeController.fetchData(getDateMonthYear());
   }
+
+  void getAiImage() {}
 
   void updateMarkedDays() {
     markedDays.clear();
-    // final year = selectedMonthYear.value.year;
-    // final month = selectedMonthYear.value.month;
-    // Mark the 2nd, 5th, and 6th days of the first week (if they exist and aren't Thursday)
     final days = getDaysInWeek();
     if (days.length > 1) markedDays.add(days[1]); // 2nd day (e.g., Tue)
     if (days.length > 4) markedDays.add(days[4]); // 5th day (e.g., Sat)
@@ -32,6 +39,7 @@ class CalendarController extends GetxController {
     }
     selectedMonthYear.value = DateTime(newYear, newMonth, 1);
     updateMarkedDays();
+    yourEverydayTreeController.fetchData(getDateMonthYear());
     selectedDays.clear(); // Clear selections when month/year changes
   }
 
@@ -44,6 +52,7 @@ class CalendarController extends GetxController {
     }
     selectedMonthYear.value = DateTime(newYear, newMonth, 1);
     updateMarkedDays();
+    yourEverydayTreeController.fetchData(getDateMonthYear());
     selectedDays.clear(); // Clear selections when month/year changes
   }
 
@@ -51,22 +60,52 @@ class CalendarController extends GetxController {
     return DateFormat('MMM yyyy').format(selectedMonthYear.value).toUpperCase();
   }
 
+  String getDateMonthYear() {
+    selectedAllDate.value =
+        DateFormat('yyyy-MM-dd').format(selectedMonthYear.value).toUpperCase();
+    return selectedAllDate.value;
+  }
+
+  RxString get dateStream => selectedAllDate;
+
   List<DateTime> getDaysInWeek() {
     final year = selectedMonthYear.value.year;
     final month = selectedMonthYear.value.month;
     DateTime firstDayOfMonth = DateTime(year, month, 1);
-    int weekday = firstDayOfMonth.weekday;
-    DateTime firstMonday = firstDayOfMonth.add(
-      Duration(days: (weekday == 1 ? 0 : 8 - weekday)),
-    );
-    return [
-      firstMonday, // Mon
-      firstMonday.add(const Duration(days: 1)), // Tue
-      firstMonday.add(const Duration(days: 2)), // Wed
-      firstMonday.add(const Duration(days: 4)), // Fri
-      firstMonday.add(const Duration(days: 5)), // Sat
-      firstMonday.add(const Duration(days: 6)), // Sun
-    ];
+    // Find the first Monday of the month
+    int offset =
+        (firstDayOfMonth.weekday == DateTime.monday)
+            ? 0
+            : (8 - firstDayOfMonth.weekday) % 7;
+    DateTime firstMonday = firstDayOfMonth.add(Duration(days: offset));
+
+    return List.generate(7, (index) => firstMonday.add(Duration(days: index)));
+  }
+
+  Map<int, List<DateTime>> getDaysGroupedByWeekdayInMonth() {
+    final year = selectedMonthYear.value.year;
+    final month = selectedMonthYear.value.month;
+    final daysInMonth = DateUtils.getDaysInMonth(year, month);
+
+    Map<int, List<DateTime>> grouped = {
+      for (int i = 1; i <= 7; i++) i: [], // 1 = Monday, ..., 7 = Sunday
+    };
+
+    for (int day = 1; day <= daysInMonth; day++) {
+      DateTime current = DateTime(year, month, day);
+      grouped[current.weekday]?.add(current);
+    }
+
+    return grouped;
+  }
+
+  Map<int, DateTime> getSelectedDaysGroupedByWeekday() {
+    Map<int, DateTime> result = {};
+    for (final day in selectedDays) {
+      // 1 = Mon, ..., 7 = Sun
+      result[day.weekday] ??= day; // Only take the first one
+    }
+    return result;
   }
 
   bool isMarked(DateTime day) {
@@ -81,8 +120,10 @@ class CalendarController extends GetxController {
   void toggleSelectDay(DateTime day) {
     if (selectedDays.contains(day)) {
       selectedDays.remove(day);
+      print('selected day: $selectedDays');
     } else {
       selectedDays.add(day);
+      print('selected day: $selectedDays');
     }
   }
 }

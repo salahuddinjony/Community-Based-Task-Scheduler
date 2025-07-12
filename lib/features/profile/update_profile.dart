@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'controller/profile_controller.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tread256/core/common/widgets/shimmer_loading.dart';
 
 class UpdateProfile extends StatelessWidget {
-  const UpdateProfile({super.key});
+  final ProfileAllController profileController = Get.put(
+    ProfileAllController(),
+  );
+  UpdateProfile({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ProfileController _profileController = Get.put(ProfileController());
-
+    final data = profileController.editProfileData.value;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -25,55 +28,64 @@ class UpdateProfile extends StatelessWidget {
                     clipBehavior: Clip.none,
                     children: [
                       Obx(() {
-                        final imageFile = _profileController.imageFile.value;
+                        final imageFile = profileController.imageFile.value;
                         return CircleAvatar(
                           radius: 38,
-                          backgroundImage:
+                          child:
                               imageFile != null
-                                  ? FileImage(imageFile)
-                                  : const NetworkImage(
-                                        'https://randomuser.me/api/portraits/men/32.jpg',
-                                      )
-                                      as ImageProvider,
+                                  ? ClipOval(
+                                    child: Image.file(
+                                      imageFile,
+                                      width: 76,
+                                      height: 76,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (
+                                        context,
+                                        error,
+                                        stackTrace,
+                                      ) {
+                                        return Container(
+                                          color: Colors.grey[300],
+                                          child: Icon(
+                                            Icons.person,
+                                            size: 40,
+                                            color: Colors.grey[600],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  )
+                                  : ClipOval(
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          data?.profile.image ??
+                                          'https://randomuser.me/api/portraits/men/32.jpg',
+                                      width: 76,
+                                      height: 76,
+                                      fit: BoxFit.cover,
+                                      placeholder:
+                                          (context, url) =>
+                                              const ShimmerCircle(size: 76),
+                                      errorWidget:
+                                          (context, url, error) => const Icon(
+                                            Icons.person,
+                                            size: 38,
+                                          ),
+                                    ),
+                                  ),
                         );
                       }),
-
-                      // Positioned(
-                      //   bottom: 10, // Adjust as needed
-                      //   right: 10, // Adjust as needed
-                      //   child: Container(
-                      //     decoration: BoxDecoration(
-                      //       shape: BoxShape.circle,
-                      //       border: Border.all(color: Colors.white, width: 2),
-                      //     ),
-                      //     child: Padding(
-                      //       padding: const EdgeInsets.all(4.0),
-                      //       child: InkWell(
-                      //         onTap: () {
-                      //           _profileController.showImageSourceDialog(
-                      //             context,
-                      //           );
-                      //         },
-                      //         child: Image.asset(
-                      //           'assets/icons/edit.png',
-                      //           width: 30, // Adjust the size of the icon
-                      //           fit: BoxFit.cover,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                       Positioned(
                         right: -5,
                         bottom: 0,
                         child: GestureDetector(
                           onTap: () {
-                            _profileController.showImageSourceDialog(context);
+                            profileController.showImageSourceDialog(context);
                           },
                           child: CircleAvatar(
                             radius: 13,
                             backgroundImage: AssetImage(
-                              'assets/icons/edit.png', // Replace with actual image URL
+                              'assets/icons/edit.png',
                             ),
                           ),
                         ),
@@ -81,8 +93,8 @@ class UpdateProfile extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Sarah Anderson',
+                  Text(
+                    data?.profile.name ?? 'No Name',
                     style: TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.w600,
@@ -101,7 +113,7 @@ class UpdateProfile extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   TextFormField(
-                    initialValue: 'Sarah Anderson',
+                    controller: profileController.nameController,
                     decoration: _inputDecoration(hintText: 'Enter your name'),
                   ),
                   const SizedBox(height: 18),
@@ -111,8 +123,12 @@ class UpdateProfile extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   TextFormField(
-                    initialValue: 'name@email.com',
-                    decoration: _inputDecoration(hintText: 'name@email.com'),
+                    readOnly: true,
+                    controller: profileController.emailController,
+                    decoration: _inputDecoration(
+                      hintText: 'name@email.com',
+                    ).copyWith(hintStyle: const TextStyle(color: Colors.grey)),
+                    style: const TextStyle(color: Colors.black),
                   ),
                   const SizedBox(height: 18),
                   Align(
@@ -121,36 +137,13 @@ class UpdateProfile extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   TextFormField(
-                    initialValue: 'metrotech center, brooklyn, ny 11201, usa',
+                    controller: profileController.addressController,
                     decoration: _inputDecoration(
                       hintText: 'Enter your address',
                     ),
                   ),
                   const SizedBox(height: 18),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Your Password', style: _labelStyle),
-                  ),
-                  const SizedBox(height: 6),
-                  Obx(
-                    () => TextFormField(
-                      obscureText: _profileController.obscurePassword.value,
 
-                      decoration: InputDecoration(
-                        hintText: 'Enter your password',
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _profileController.obscurePassword.value
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                          onPressed: () {
-                            _profileController.togglePasswordVisibility();
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 36),
                   SizedBox(
                     width: double.infinity,
@@ -163,14 +156,16 @@ class UpdateProfile extends StatelessWidget {
                         ),
                       ),
                       child: const Text(
-                        'Submit',
+                        'Update',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        profileController.updateProfile();
+                      },
                     ),
                   ),
                   const SizedBox(height: 24),

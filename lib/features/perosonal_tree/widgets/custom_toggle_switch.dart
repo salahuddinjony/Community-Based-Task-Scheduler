@@ -16,12 +16,14 @@ class CustomToggleButton extends StatelessWidget {
   final double height;
   final double borderRadius;
   final double padding;
+  final VoidCallback? onToggle;
+  final RxBool? isActive;
 
   const CustomToggleButton({
     super.key,
     required this.controller,
-    this.leftText = "ON",
-    this.rightText = "OFF",
+    this.leftText = "View",
+    this.rightText = "Close",
     this.backgroundColor = const Color(0xFFBBBBBB), // Colors.grey[300]
     this.activeColor = Colors.white,
     this.inactiveColor = const Color.fromARGB(
@@ -36,6 +38,8 @@ class CustomToggleButton extends StatelessWidget {
     this.height = 46.0,
     this.borderRadius = 12.0,
     this.padding = 0.0,
+    this.onToggle,
+    this.isActive,
   });
 
   @override
@@ -44,9 +48,17 @@ class CustomToggleButton extends StatelessWidget {
     final toggleWidth = screenWidth * widthFactor - padding;
     final sliderWidth = toggleWidth / 2 - padding / 4;
 
+    final RxBool activeState = isActive ?? controller.showCompleted;
+
     return Obx(
       () => GestureDetector(
-        onTap: controller.toggleIntentionalActs,
+        onTap: () {
+          if (onToggle != null) {
+            onToggle!();
+          } else {
+            activeState.toggle();
+          }
+        },
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: padding / 2),
           height: height,
@@ -62,7 +74,7 @@ class CustomToggleButton extends StatelessWidget {
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeInOut,
                 left:
-                    controller.isIntentionalActsOn.value
+                    activeState.value
                         ? padding / 4 + 2.5
                         : toggleWidth / 2 - padding / 4 - 2.5,
                 top: 2.5,
@@ -72,16 +84,13 @@ class CustomToggleButton extends StatelessWidget {
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.15),
+                        color: Colors.black.withValues(alpha: .15),
                         blurRadius:
                             2, // Increased blurRadius to match CustomToggleSwitch
                         offset: const Offset(0, 2),
                       ),
                     ],
-                    color:
-                        controller.isIntentionalActsOn.value
-                            ? activeColor
-                            : inactiveColor,
+                    color: activeState.value ? activeColor : inactiveColor,
                     borderRadius: BorderRadius.circular(borderRadius),
                   ),
                 ),
@@ -96,7 +105,7 @@ class CustomToggleButton extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                           color:
-                              controller.isIntentionalActsOn.value
+                              activeState.value
                                   ? textActiveColor
                                   : textInactiveColor,
                         ),
@@ -111,7 +120,7 @@ class CustomToggleButton extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                           color:
-                              controller.isIntentionalActsOn.value
+                              activeState.value
                                   ? textInactiveColor
                                   : textActiveColor,
                         ),

@@ -70,6 +70,7 @@ class SaveLogScreen extends StatelessWidget {
                   Text(
                     ideas[0]['title'] as String,
                     style: getTextStyle(
+                      context: context,
                       color: AppColors.primary,
                       fontWeight: FontWeight.w400,
                       fontSize: 20,
@@ -80,6 +81,7 @@ class SaveLogScreen extends StatelessWidget {
                   Text(
                     ideas[0]['subtitle'] as String,
                     style: getTextStyle(
+                      context: context,
                       color: Color(0xFF535A6C),
                       fontWeight: FontWeight.w400,
                       fontSize: 16,

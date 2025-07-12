@@ -35,6 +35,7 @@ class CoustmCard extends StatelessWidget {
               title ?? "Inner Circle",
 
               style: getTextStyle(
+                context: context,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
                 lineHeight: 30,
@@ -47,6 +48,7 @@ class CoustmCard extends StatelessWidget {
               description ??
                   "This tree represents your inner circle, the\n\n people closest to you, like family and\n\n friends. Add their names and track\n\n simple intentional acts of care.",
               style: getTextStyle(
+                context: context,
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
                 lineHeight: 24,

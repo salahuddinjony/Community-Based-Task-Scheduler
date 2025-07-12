@@ -1,6 +1,6 @@
 // lib/features/perosonal_tree/widgets/section_header.dart
 import 'package:flutter/material.dart';
-import 'package:tread256/core/utils/constants/colors.dart';
+import 'package:tread256/core/common/styles/global_text_style.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
@@ -9,14 +9,14 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
+    return Center(
       child: Text(
         title,
-        style: TextStyle(
-          color: AppColors.primary,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
+        style: getTextStyle(
+          context: context,
+          color: Color(0xff57B396),
+          fontWeight: FontWeight.w400,
+          fontSize: 28,
         ),
       ),
     );

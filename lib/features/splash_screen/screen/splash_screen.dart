@@ -14,8 +14,8 @@ class SplashScreen extends GetView<SplashController> {
         child: GetBuilder<SplashController>(
           builder:
               (controller) => CircleAvatar(
-                radius: 48,
-                backgroundColor: const Color(0xFF5DBB9B),
+                radius: 80,
+                backgroundColor: Colors.transparent,
                 backgroundImage: AssetImage(ImagePath.component),
               ),
         ),

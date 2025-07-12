@@ -19,7 +19,8 @@ class PrivacySecurityScreen extends StatelessWidget {
         title: Text(
           'Privacy & Security',
           style: getTextStyle(
-            fontSize: 20,
+            context: context,
+            fontSize: 25,
             fontWeight: FontWeight.w500,
             color:
                 AppColors.primary, // Assuming primary color for app bar title
@@ -42,17 +43,17 @@ class PrivacySecurityScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Security Settings Section
-              Text(
-                'Security Settings',
-                style: getTextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color:
-                      AppColors
-                          .primary, // Assuming primary color for section title
-                ),
-              ),
-              const SizedBox(height: 10),
+              // Text(
+              //   'Security Settings',
+              //   style: getTextStyle(
+              //     context: context,
+              //     fontSize: 20,
+              //     fontWeight: FontWeight.w500,
+              //     color:
+              //         AppColors
+              //             .primary, // Assuming primary color for section title
+              //   ),
+              // ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
@@ -64,31 +65,33 @@ class PrivacySecurityScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     // Two-Factor Authentication Tile
-                    _buildSettingsTile(
-                      title: 'Two-Factor Authentication',
-                      subtitle:
-                          'Add an extra layer of security to your account',
-                      value: controller.twoFactorEnabled,
-                      onChanged: (bool newValue) {
-                        controller.updateToggle(
-                          'twoFactor',
-                          newValue,
-                        ); // Call the single update function
-                      },
-                    ),
-                    const Divider(color: Color(0xFFE0E0E0)), // Divider
-                    // Biometric Login Tile
-                    _buildSettingsTile(
-                      title: 'Biometric Login',
-                      subtitle: 'Use fingerprint or face recognition to login',
-                      value: controller.biometricLoginEnabled,
-                      onChanged: (bool newValue) {
-                        controller.updateToggle(
-                          'biometric',
-                          newValue,
-                        ); // Call the single update function
-                      },
-                    ),
+                    // _buildSettingsTile(
+                    //   context: context,
+                    //   title: 'Two-Factor Authentication',
+                    //   subtitle:
+                    //       'Add an extra layer of security to your account',
+                    //   value: controller.twoFactorEnabled,
+                    //   onChanged: (bool newValue) {
+                    //     controller.updateToggle(
+                    //       'twoFactor',
+                    //       newValue,
+                    //     ); // Call the single update function
+                    //   },
+                    // ),
+                    // const Divider(color: Color(0xFFE0E0E0)), // Divider
+                    // // Biometric Login Tile
+                    // _buildSettingsTile(
+                    //   context: context,
+                    //   title: 'Biometric Login',
+                    //   subtitle: 'Use fingerprint or face recognition to login',
+                    //   value: controller.biometricLoginEnabled,
+                    //   onChanged: (bool newValue) {
+                    //     controller.updateToggle(
+                    //       'biometric',
+                    //       newValue,
+                    //     ); // Call the single update function
+                    //   },
+                    // ),
                   ],
                 ),
               ),
@@ -97,9 +100,10 @@ class PrivacySecurityScreen extends StatelessWidget {
 
               // Privacy Settings Section
               Text(
-                'Privacy Settings',
+                'Notifications Settings',
                 style: getTextStyle(
-                  fontSize: 14,
+                  context: context,
+                  fontSize: 20,
                   fontWeight: FontWeight.w500,
                   color:
                       AppColors
@@ -119,6 +123,7 @@ class PrivacySecurityScreen extends StatelessWidget {
                   children: [
                     // Push Notifications Tile
                     _buildSettingsTile(
+                      context: context,
                       title: 'Push Notifications',
                       subtitle: 'Receive notifications about important updates',
                       value: controller.pushNotificationsEnabled,
@@ -129,19 +134,20 @@ class PrivacySecurityScreen extends StatelessWidget {
                         ); // Call the single update function
                       },
                     ),
-                    const Divider(color: Color(0xFFE0E0E0)), // Divider
+                    // const Divider(color: Color(0xFFE0E0E0)), // Divider
                     // Location Services Tile
-                    _buildSettingsTile(
-                      title: 'Location Services',
-                      subtitle: 'Allow app to access your location',
-                      value: controller.locationServicesEnabled,
-                      onChanged: (bool newValue) {
-                        controller.updateToggle(
-                          'locationServices',
-                          newValue,
-                        ); // Call the single update function
-                      },
-                    ),
+                    // _buildSettingsTile(
+                    //   context: context,
+                    //   title: 'Location Services',
+                    //   subtitle: 'Allow app to access your location',
+                    //   value: controller.locationServicesEnabled,
+                    //   onChanged: (bool newValue) {
+                    //     controller.updateToggle(
+                    //       'locationServices',
+                    //       newValue,
+                    //     ); // Call the single update function
+                    //   },
+                    // ),
                   ],
                 ),
               ),
@@ -152,7 +158,8 @@ class PrivacySecurityScreen extends StatelessWidget {
               Text(
                 'Data Collection',
                 style: getTextStyle(
-                  fontSize: 14,
+                  context: context,
+                  fontSize: 20,
                   fontWeight: FontWeight.w500,
                   color:
                       AppColors
@@ -172,6 +179,7 @@ class PrivacySecurityScreen extends StatelessWidget {
                   children: [
                     // Analytics Tile
                     _buildSettingsTile(
+                      context: context,
                       title: 'Analytics',
                       subtitle: 'Help improve the app by sharing usage data',
                       value: controller.analyticsEnabled,
@@ -185,9 +193,10 @@ class PrivacySecurityScreen extends StatelessWidget {
                     const Divider(color: Color(0xFFE0E0E0)), // Divider
                     // Marketing Communications Tile
                     _buildSettingsTile(
+                      context: context,
                       title: 'Marketing Communications',
                       subtitle:
-                          'Receive updates about new features and promotions',
+                          'Receive updates about new features and\n\npromotions',
                       value: controller.marketingCommunicationsEnabled,
                       onChanged: (bool newValue) {
                         controller.updateToggle(
@@ -202,7 +211,7 @@ class PrivacySecurityScreen extends StatelessWidget {
 
               const SizedBox(height: 30), // Space before buttons
               // Save Changes Button
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
@@ -221,7 +230,8 @@ class PrivacySecurityScreen extends StatelessWidget {
                   child: Text(
                     'Save Changes',
                     style: getTextStyle(
-                      fontSize: 16,
+                      context: context,
+                      fontSize: 20,
                       fontWeight: FontWeight.w600,
                       color: Colors.white, // Assuming white text color
                     ),
@@ -231,7 +241,7 @@ class PrivacySecurityScreen extends StatelessWidget {
 
               const SizedBox(height: 15), // Space between buttons
               // Reset to Defaults Button
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
                   onPressed: () {
@@ -253,7 +263,8 @@ class PrivacySecurityScreen extends StatelessWidget {
                   child: Text(
                     'Reset to Defaults',
                     style: getTextStyle(
-                      fontSize: 16,
+                      context: context,
+                      fontSize: 20,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -268,6 +279,7 @@ class PrivacySecurityScreen extends StatelessWidget {
 
   // Reusable widget for settings tiles
   Widget _buildSettingsTile({
+    required BuildContext context,
     required String title,
     required String subtitle,
     required RxBool value,
@@ -283,18 +295,20 @@ class PrivacySecurityScreen extends StatelessWidget {
               Text(
                 title,
                 style: getTextStyle(
-                  fontSize: 16,
+                  context: context,
+                  fontSize: 20,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFF535A6C), // Assuming text color
+                  color: Color(0xFF535A6C),
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 10),
               Text(
                 subtitle,
                 style: getTextStyle(
-                  fontSize: 12,
+                  context: context,
+                  fontSize: 16,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFF94A3B8), // Assuming subtitle color
+                  color: Color(0xFF94A3B8),
                 ),
               ),
             ],

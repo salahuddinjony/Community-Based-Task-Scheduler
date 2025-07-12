@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tread256/core/utils/responsive.dart';
 
 TextStyle getTextStyle({
+  required BuildContext context,
   final double fontSize = 14.0,
   final FontWeight fontWeight = FontWeight.w400,
   final double lineHeight = 21.0,
@@ -10,14 +11,15 @@ TextStyle getTextStyle({
   Color color = Colors.black,
 }) {
   return GoogleFonts.nunito(
-    fontSize: fontSize.sp,
+    fontSize: Responsive.getResponsiveFontSize(context, fontSize),
     fontWeight: fontWeight,
-    height: fontSize.sp / lineHeight.sp,
+    height: Responsive.getResponsiveFontSize(context, fontSize) / lineHeight,
     color: color,
   );
 }
 
 TextStyle getTextStyleCabinCondensed({
+  required BuildContext context,
   final double fontSize = 14.0,
   final FontWeight fontWeight = FontWeight.w400,
   final double lineHeight = 21.0,
@@ -25,9 +27,9 @@ TextStyle getTextStyleCabinCondensed({
   Color color = Colors.black,
 }) {
   return GoogleFonts.cabinCondensed(
-    fontSize: fontSize.sp,
+    fontSize: Responsive.getResponsiveFontSize(context, fontSize),
     fontWeight: fontWeight,
-    height: fontSize.sp / lineHeight.sp,
+    height: Responsive.getResponsiveFontSize(context, fontSize) / lineHeight,
     color: color,
   );
 }

@@ -5,7 +5,7 @@ import 'package:tread256/features/bottom_navbar/controller/bottom_navbar_control
 
 class Navbar extends StatelessWidget {
   Navbar({super.key});
-  final BottomNavbarController controller = Get.put(BottomNavbarController());
+  final BottomNavbarController controller = Get.find<BottomNavbarController>();
 
   final List<String> icons = [
     ImagePath.home,
@@ -14,7 +14,7 @@ class Navbar extends StatelessWidget {
     ImagePath.profile,
   ];
 
-  final List<String> labels = ['Home', 'Intentions', 'Inspirations', 'Profile'];
+  final List<String> labels = ['Home', 'Intentions', 'Inspiration', 'Profile'];
 
   @override
   Widget build(BuildContext context) {

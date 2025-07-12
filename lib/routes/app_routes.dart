@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
+import 'package:tread256/features/auth/controler/create_account_controller.dart';
 import 'package:tread256/features/auth/screen/add_organizations.dart';
 import 'package:tread256/features/auth/screen/create_account.dart';
 import 'package:tread256/features/auth/screen/forgot_password.dart';
-import 'package:tread256/features/auth/screen/forgot_password_otp.dart';
 import 'package:tread256/features/auth/screen/login_screen.dart';
+import 'package:tread256/features/bottom_navbar/screen/bottom_navbar_screen.dart';
 import 'package:tread256/features/inspiration/screen/nspiration.dart';
 import 'package:tread256/features/profile/seeds_app.dart';
 import 'package:tread256/features/profile/profile_screen.dart';
-import 'package:tread256/features/profile/update_profile.dart';
 import 'package:tread256/features/splash_screen/screen/fill_your_canopies.dart';
 import 'package:tread256/features/splash_screen/screen/splash_screen.dart';
 import 'package:tread256/features/splash_screen/screen/splash_welcome.dart';
@@ -39,7 +39,7 @@ class AppRoute {
   static const String _updateProfileScreen = "/updateProfileScreen";
   static const String _createAccountScreen = "/createAccountScreen";
   static const String _forgotPasswordScreen = "/forgotPasswordScreen";
-  static const String _forgotPasswordOtpScreen = "/forgotPasswordOtpScreen";
+
   static const String _addOrganizationsScreen = "/addOrganizationsScreen";
   static const String _profileScreen = "/profileScreen";
   static const String _seedsAppScreen = "/seedsAppScreen";
@@ -49,10 +49,10 @@ class AppRoute {
   static const String _donationScreen = "/donationScreen";
   static const String _privacySecurityScreen = "/privacySecurityScreen";
 
+  static const String _bottomNavbarScreen = "/bottomNavbarScreen";
+
   // Getter methods for route names
-  static String getSplashScreen() {
-    return _splashScreen;
-  }
+  static String getSplashScreen() => _splashScreen;
 
   static String getSplashWelcomeScreen() => _splashWelcomeScreen;
   static String getFillYourCanopiesScreen() => _fillYourCanopiesScreen;
@@ -66,7 +66,7 @@ class AppRoute {
   static String getLoginScreen() => _loginScreen;
   static String getCreateAccountScreen() => _createAccountScreen;
   static String getForgotPasswordScreen() => _forgotPasswordScreen;
-  static String getForgotPasswordOtpScreen() => _forgotPasswordOtpScreen;
+
   static String getAddOrganizationsScreen() => _addOrganizationsScreen;
   static String getProfileScreen() => _profileScreen;
   static String getNspirationScreen() => _nspirationScreen;
@@ -77,10 +77,13 @@ class AppRoute {
   static String getYourCommunityTreeScreen() => _yourCommunityTreeScreen;
   static String getDonationScreen() => _donationScreen;
   static String getPrivacySecurityScreen() => _privacySecurityScreen;
+  static String getBottomNavbarScreen() => _bottomNavbarScreen;
+
   // Define routes for GetX navigation
   static List<GetPage> routes = [
     GetPage(name: _splashScreen, page: () => SplashScreen()),
     GetPage(name: _splashWelcomeScreen, page: () => SplashWelcome()),
+    GetPage(name: _bottomNavbarScreen, page: () => BottomNavbarScreen()),
     GetPage(
       name: _fillYourCanopiesScreen,
       page: () => FillYourCanopiesScreen(),
@@ -99,18 +102,17 @@ class AppRoute {
     GetPage(
       name: _createAccountScreen,
       page: () => CreateAccountScreen(),
-      transition: Transition.fadeIn, // Optional: Add transition animation
+      binding: BindingsBuilder(() {
+        Get.put(CreateAccountController());
+      }),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: _forgotPasswordScreen,
       page: () => ForgotPasswordScreen(),
       transition: Transition.fadeIn, // Optional: Add transition animation
     ),
-    GetPage(
-      name: _forgotPasswordOtpScreen,
-      page: () => ForgotPasswordOtpScreen(),
-      transition: Transition.fadeIn, // Optional: Add transition animation
-    ),
+
     GetPage(
       name: _addOrganizationsScreen,
       page: () => AddOrganizationsScreen(),
@@ -126,11 +128,11 @@ class AppRoute {
       page: () => Nspiration(),
       transition: Transition.fadeIn, // Optional: Add transition animation
     ),
-    GetPage(
-      name: _updateProfileScreen,
-      page: () => UpdateProfile(),
-      transition: Transition.fadeIn, // Optional: Add transition animation
-    ),
+    // GetPage(
+    //   name: _updateProfileScreen,
+    //   page: () => UpdateProfile(),
+    //   transition: Transition.fadeIn, // Optional: Add transition animation
+    // ),
     GetPage(
       name: _seedsAppScreen,
       page: () => SeedsApp(),

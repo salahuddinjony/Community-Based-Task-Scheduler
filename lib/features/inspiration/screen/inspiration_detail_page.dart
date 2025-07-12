@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tread256/core/utils/constants/colors.dart';
 import 'package:tread256/features/inspiration/controller/inspiration_controller.dart';
+import 'package:tread256/core/utils/responsive.dart';
 
 class InspirationDetailPage extends StatelessWidget {
   final InspirationArticle article;
@@ -31,19 +32,18 @@ class InspirationDetailPage extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: Responsive.getResponsivePadding(context, horizontal: 25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Title
                 Text(
                   article.title.replaceAll('\n', ' '),
-                  // Remove unwanted newlines/tabs
                   style: TextStyle(
                     color: const Color(0xff535A6C),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    height: 1.4, // Added line spacing
+                    fontSize: Responsive.getResponsiveFontSize(context, 26),
+                    fontWeight: FontWeight.w500,
+                    height: 1.4,
                   ),
                 ),
 
@@ -52,9 +52,9 @@ class InspirationDetailPage extends StatelessWidget {
                   article.descriptionFast,
                   style: TextStyle(
                     color: const Color(0xff535A6C),
-                    fontSize: 14,
+                    fontSize: Responsive.getResponsiveFontSize(context, 20),
                     fontWeight: FontWeight.w400,
-                    height: 1.5, // Added line spacing
+                    height: 1.5,
                   ),
                 ),
 
@@ -63,17 +63,17 @@ class InspirationDetailPage extends StatelessWidget {
                   article.descriptionLong,
                   style: TextStyle(
                     color: const Color(0xff535A6C),
-                    fontSize: 14,
+                    fontSize: Responsive.getResponsiveFontSize(context, 20),
                     fontWeight: FontWeight.w400,
-                    height: 1.5, // Added line spacing
+                    height: 1.5,
                   ),
                 ),
 
                 // Sir1 (Formatted with preserved line breaks and spacing)
-                _buildFormattedText(article.sir1),
+                _buildFormattedText(context, article.sir1),
 
                 // Sir2 (Formatted with preserved line breaks and spacing)
-                _buildFormattedText(article.sir2),
+                _buildFormattedText(context, article.sir2),
               ],
             ),
           ),
@@ -83,7 +83,7 @@ class InspirationDetailPage extends StatelessWidget {
   }
 
   // Helper method to handle text with line breaks and emojis
-  Widget _buildFormattedText(String text) {
+  Widget _buildFormattedText(BuildContext context, String text) {
     // Split text by newlines to preserve intentional line breaks
     final lines =
         text.split('\n').where((line) => line.trim().isNotEmpty).toList();
@@ -93,16 +93,16 @@ class InspirationDetailPage extends StatelessWidget {
       children:
           lines.map((line) {
             return Padding(
-              padding: const EdgeInsets.only(
-                bottom: 8,
-              ), // Increased spacing between lines
+              padding: EdgeInsets.only(
+                bottom: Responsive.getResponsiveSpacing(context, 8),
+              ),
               child: Text(
                 line.trim(),
                 style: TextStyle(
                   color: const Color(0xff535A6C),
-                  fontSize: 14,
+                  fontSize: Responsive.getResponsiveFontSize(context, 20),
                   fontWeight: FontWeight.w400,
-                  height: 1.5, // Added line spacing
+                  height: 1.5,
                 ),
               ),
             );

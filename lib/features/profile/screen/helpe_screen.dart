@@ -9,7 +9,7 @@ class HelpPage extends StatelessWidget {
       {
         'question': 'Is there a free trial available?',
         'answer':
-            'Yes, you can try us for free for 30 days. If you want, we’ll provide you with a free, personalized 30-minute onboarding call to get you up and running as soon as possible.',
+            'Yes, you can try us for free for 30 days. If you want, we will provide you with a free, personalized 30-minute onboarding call to get you up and running as soon as possible.',
       },
       {'question': 'Can I change my plan later?', 'answer': ''},
       {'question': 'What is your cancellation policy?', 'answer': ''},
@@ -29,7 +29,7 @@ class HelpPage extends StatelessWidget {
           style: TextStyle(
             color: Color(0xFF222B45),
             fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontSize: 20,
           ),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
@@ -40,7 +40,7 @@ class HelpPage extends StatelessWidget {
           const SizedBox(height: 8),
           const Text(
             'Everything you need to know about the product and billing.',
-            style: TextStyle(color: Colors.black54, fontSize: 15),
+            style: TextStyle(color: Colors.black54, fontSize: 16),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -57,7 +57,7 @@ class HelpPage extends StatelessWidget {
                   faq['question']!,
                   style: const TextStyle(
                     fontWeight: FontWeight.w500,
-                    fontSize: 16,
+                    fontSize: 17,
                     color: Color(0xFF222B45),
                   ),
                 ),
@@ -81,7 +81,7 @@ class HelpPage extends StatelessWidget {
                               faq['answer']!,
                               style: const TextStyle(
                                 color: Colors.black87,
-                                fontSize: 15,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -94,7 +94,7 @@ class HelpPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF2AC7A5).withValues(alpha: 0.07),
+              color: const Color(0xFF2AC7A5).withValues(alpha: .07),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
@@ -103,14 +103,14 @@ class HelpPage extends StatelessWidget {
                   'Still have questions?',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 20,
                     color: Color(0xFF222B45),
                   ),
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Can’t find the answer you’re looking for? Please chat to our friendly team.',
-                  style: TextStyle(color: Colors.black54, fontSize: 15),
+                  'Can not find the answer you are looking for? Please chat to our friendly team.',
+                  style: TextStyle(color: Colors.black54, fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 12),

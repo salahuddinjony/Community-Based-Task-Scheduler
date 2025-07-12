@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:tread256/features/subscriptions/services/constantStripe.dart';
+import 'package:tread256/features/subscriptions/services/constant_stripe.dart';
 
 class StripeServicePayment {
   StripeServicePayment._();
@@ -25,7 +25,7 @@ class StripeServicePayment {
       );
 
       if (paymentIntentClientSecret == null) {
-        print("Failed to create PaymentIntent");
+        // print("Failed to create PaymentIntent");
         return;
       }
 
@@ -38,7 +38,7 @@ class StripeServicePayment {
 
       await _processPayment();
     } catch (e) {
-      print("Error in makePayment: $e");
+      // print("Error in makePayment: $e");
     }
   }
 
@@ -69,7 +69,7 @@ class StripeServicePayment {
         return null;
       }
     } catch (e) {
-      print("Error in _createPaymentIntent: $e");
+      // print("Error in _createPaymentIntent: $e");
       return null;
     }
   }
@@ -78,7 +78,7 @@ class StripeServicePayment {
     try {
       await Stripe.instance.presentPaymentSheet();
     } catch (e) {
-      print("Error in _processPayment: $e");
+      // print("Error in _processPayment: $e");
     }
   }
 

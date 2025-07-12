@@ -1,191 +1,174 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tread256/features/intentions/widgets/custom_input_decoration.dart';
-import 'package:tread256/features/intentions/widgets/form_fields.dart';
+import 'package:tread256/core/utils/constants/colors.dart';
 import 'package:tread256/features/perosonal_tree/controller/personal_tree_controller.dart';
-import 'package:tread256/features/perosonal_tree/widgets/custom_button.dart';
-import 'package:tread256/features/perosonal_tree/widgets/custom_toggle_switch.dart';
-import 'package:tread256/features/your_everyday_tree/screen/my_initiatives.dart';
+import 'package:tread256/features/perosonal_tree/widgets/personal_tree_widgets.dart';
 
 class UserProfile extends StatelessWidget {
   final Map<String, dynamic>? data;
-  final PersonalTreeController controller;
+  final PersonalTreeController controller = Get.find<PersonalTreeController>();
 
-  const UserProfile({super.key, required this.data, required this.controller});
+  UserProfile({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
-    // print("parsinge data: $data");
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            width: double.infinity,
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.primary, width: 3.0),
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) {
+          controller.refreshLeavesCount();
+          controller.refreshIntentionalActs();
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          minimum: EdgeInsets.zero,
+          bottom: false,
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return Scaffold(
+                body: Container(
+                  width: double.infinity,
+                  color: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 60,
+                    horizontal: 20,
                   ),
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage:
-                        data?['imagePath'] != null &&
-                                (data?['imagePath'] as String).isNotEmpty
-                            ? FileImage(File(data?['imagePath']))
-                            : const AssetImage("assets/icons/userprofile.png"),
-                    backgroundColor: Colors.grey.shade200,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  data?['name'] ?? '',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  "3 Actions Completed",
-                  style: TextStyle(color: AppColors.primary, fontSize: 15),
-                ),
-                const SizedBox(height: 10),
-                CustomToggleButton(
-                  controller: controller,
-                  leftText: "Completed",
-                  rightText: "Open Acts",
-                  backgroundColor: Colors.grey[200]!,
-                  activeColor: AppColors.primary,
-                  inactiveColor: AppColors.primary,
-                  textActiveColor: Colors.white,
-                  textInactiveColor: Colors.black,
-                  widthFactor: 0.8,
-                  height: 50.0,
-                  borderRadius: 10.0,
-                  padding: 3.0,
-                ),
-
-                Obx(
-                  () =>
-                      controller.isIntentionalActsOn.value
-                          ? ListView.builder(
-                            itemCount: 5,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-
-                            itemBuilder: (BuildContext context, int index) {
-                              return Card(
-                                color: Colors.grey[200],
-                                margin: EdgeInsets.only(bottom: 15),
-                                elevation: 0,
-                                child: ListTile(
-                                  leading: Image.asset(
-                                    "assets/icons/right.png",
-                                  ),
-                                  title: Text("Schedule coffee meetup"),
-                                  subtitle: Text("2024-02-20 at 14:00"),
-                                ),
-                              );
-                            },
-                          )
-                          : ListView.builder(
-                            itemCount: 5,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-
-                            itemBuilder: (BuildContext context, int index) {
-                              return Card(
-                                color: Colors.grey[200],
-                                margin: EdgeInsets.only(bottom: 15),
-                                elevation: 0,
-                                child: ListTile(
-                                  leading: Image.asset(
-                                    "assets/icons/right2.png",
-                                    height: 40,
-                                  ),
-                                  title: Text("Schedule coffee meetup"),
-                                  subtitle: Text("2024-02-20 at 14:00"),
-                                ),
-                              );
-                            },
-                          ),
-                ),
-                CustomButtom(
-                  buttonText: "Add New Action",
-                  onPressed: () {
-                    Get.bottomSheet(
-                      isDismissible: false,
+                  child: Column(
+                    children: [
+                      // Shimmer for profile header
                       Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 40,
-                          vertical: 20,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            // mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Add New Actions",
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Spacer(),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.close,
-                                      size: 35,
-                                      weight: 800,
-                                    ),
-                                    onPressed: () => Get.back(),
-                                  ),
-                                ],
-                              ),
-                              buildTextField(hintText: "Actions Title"),
-                              SizedBox(height: 10),
-                              TextField(
-                                decoration: customInputDecoration(
-                                  hintText: 'Descriptions',
-                                ),
-                                maxLines: 6,
-                              ),
-                              SizedBox(height: 10),
-                              buildTextField(hintText: "Date"),
-                              SizedBox(height: 10),
-                              buildTextField(hintText: "Time"),
-                              SizedBox(height: 10),
-                              CustomButtom(
-                                buttonText: "Apply Now",
-                                onPressed: () {
-                                  Get.back();
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
+                        height: 120,
+                        margin: const EdgeInsets.only(bottom: 20),
+                        child: const ActionShimmerLoading(),
                       ),
-                      isScrollControlled: true,
-                    );
-                  },
+                      // Shimmer for actions list
+                      Expanded(child: const ActionShimmerLoading()),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              );
+            }
+
+            final friendProfile = controller.friendProfile.value;
+
+            // Handle null friend profile
+            if (friendProfile == null) {
+              return Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        size: 64,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Failed to load profile data',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (controller.selectedUserId.value.isNotEmpty) {
+                            controller.fetchFriendProfile(
+                              controller.selectedUserId.value,
+                            );
+                          }
+                        },
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            final profileData = friendProfile.data.profile.friend.profile;
+            final actions = friendProfile.data.actions;
+
+            // print('Profile Data: ${profileData?.name}');
+            // print('Number of Actions: ${actions.length}');
+            // print('Actions: $actions');
+
+            return Center(
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.white,
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  left: 20,
+                  right: 20,
+                  bottom: 0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Profile Header
+                    Obx(
+                      () => buildProfileHeader(
+                        profileName: profileData?.name,
+                        profileImage: profileData?.image,
+                        count:
+                            controller.showCompleted.value
+                                ? actions
+                                    .where((action) => action.completed)
+                                    .length
+                                : actions
+                                    .where((action) => !action.completed)
+                                    .length,
+                        isCompleted: controller.showCompleted.value,
+                        fallbackName: data?['name'],
+                      ),
+                    ),
+
+                    // Actions List Section
+                    Expanded(
+                      child: buildActionsListSection(
+                        controller: controller,
+                        actions: actions,
+                        context: context,
+                      ),
+                    ),
+
+                    // Add New Action Button
+                    // CustomButtom(
+                    //   buttonText: "Add New Action",
+                    //   onPressed: () {
+                    //     Get.bottomSheet(
+                    //       isDismissible: false,
+                    //       buildAddActionBottomSheet(
+                    //         controller: controller,
+                    //         context: context,
+                    //       ),
+                    //       isScrollControlled: true,
+                    //     );
+                    //   },
+                    // ),
+                  ],
+                ),
+              ),
+            );
+          }),
+        ),
+        floatingActionButton: Padding(
+          padding: EdgeInsets.only(bottom: 20),
+          child: FloatingActionButton(
+            backgroundColor: AppColors.primary,
+            onPressed: () {
+              Get.bottomSheet(
+                isDismissible: false,
+                buildAddActionBottomSheet(
+                  controller: controller,
+                  context: context,
+                ),
+                isScrollControlled: true,
+              );
+            },
+            child: Icon(Icons.flash_on, color: Colors.white),
           ),
         ),
       ),

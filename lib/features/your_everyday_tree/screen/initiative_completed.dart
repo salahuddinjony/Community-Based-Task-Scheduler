@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tread256/core/utils/constants/image_path.dart';
-
-import 'document_meal_train.dart';
+import 'package:tread256/features/your_everyday_tree/controller/my_initiatives_controller.dart';
 
 class InitiativeCompletedScreen extends StatelessWidget {
-  const InitiativeCompletedScreen({super.key});
+  final String initiativeId;
+
+  InitiativeCompletedScreen({super.key, required this.initiativeId});
+  final controller = Get.find<MyInitiativesController>();
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +20,8 @@ class InitiativeCompletedScreen extends StatelessWidget {
             children: [
               // Replace with your asset path or use an Icon if you don't have an image
               CircleAvatar(
-                radius: 48,
-                backgroundColor: const Color(0xFF5DBB9B),
+                radius: 65,
+                backgroundColor: Colors.transparent,
                 backgroundImage: AssetImage(ImagePath.component),
               ),
               SizedBox(height: 32),
@@ -49,12 +51,11 @@ class InitiativeCompletedScreen extends StatelessWidget {
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
-                onPressed: () {
-                  // TODO: Implement navigation to initiatives
-                  Get.to(() => DocumentMealTrainScreen());
+                onPressed: () async {
+                  Get.back();
                 },
                 child: Text(
-                  'Return to Initiatives',
+                  'Return to Creative Initiatives',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),

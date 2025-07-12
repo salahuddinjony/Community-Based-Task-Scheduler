@@ -1,20 +1,29 @@
-import 'package:flutter/material.dart';
-import 'package:tread256/features/calender/screen/calendar_strip.dart';
-import 'package:tread256/features/main_screen/widgets/tree_slider.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:tread256/features/calender/screen/calendar_strip.dart';
+// import 'package:tread256/features/main_screen/widgets/tree_slider.dart';
+// import 'package:tread256/features/perosonal_tree/screen/personal_tree_min.dart';
 
-class HeaderSection extends StatelessWidget {
-  final List<TreeSlide> slides;
+// import '../../your_community_tree/screen/your_community_tree.dart';
+// import '../../your_everyday_tree/screen/your_everyday_tree.dart';
+// import '../controller/tree_slider_controller.dart';
 
-  const HeaderSection({super.key, required this.slides});
+// class HeaderSection extends StatelessWidget {
+//   final List<TreeSlide> slides;
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CalendarStrip(),
-        const SizedBox(height: 20),
-        TreeSlider(slides: slides),
-      ],
-    );
-  }
-}
+//   HeaderSection({super.key, required this.slides});
+//   final controller = Get.find<TreeSliderController>();
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         Column(
+//           children: [
+
+//           ],
+//         ),
+
+//       ],
+//     );
+//   }
+// }

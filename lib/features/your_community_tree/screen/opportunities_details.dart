@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/state_manager.dart';
 import 'package:tread256/core/common/styles/global_text_style.dart';
 import 'package:tread256/core/utils/constants/colors.dart';
 import 'package:tread256/core/utils/constants/image_path.dart';
 import 'package:tread256/features/perosonal_tree/widgets/custom_button.dart';
+import 'package:tread256/features/your_community_tree/screen/all_serving_opportunities.dart';
 
 class OpportunitiesDetailsScreen extends StatelessWidget {
   const OpportunitiesDetailsScreen({super.key});
@@ -38,6 +41,7 @@ class OpportunitiesDetailsScreen extends StatelessWidget {
                 Text(
                   'Thank You!',
                   style: getTextStyle(
+                    context: context,
                     fontSize: 28,
                     fontWeight: FontWeight.w400,
                     color: AppColors.primary,
@@ -49,6 +53,7 @@ class OpportunitiesDetailsScreen extends StatelessWidget {
                   "You're signed up to serve at the Food Drive.",
                   textAlign: TextAlign.center,
                   style: getTextStyle(
+                    context: context,
                     fontSize: 16,
                     color: Color(0xff535A6C),
                     fontWeight: FontWeight.w400,
@@ -61,6 +66,7 @@ class OpportunitiesDetailsScreen extends StatelessWidget {
                   child: Text(
                     'Event Details:',
                     style: getTextStyle(
+                      context: context,
                       fontSize: 18,
                       color: AppColors.primary,
                       fontWeight: FontWeight.w400,
@@ -77,7 +83,8 @@ class OpportunitiesDetailsScreen extends StatelessWidget {
                       Text(
                         '• Event: Food Drive',
                         style: getTextStyle(
-                          fontSize: 12,
+                          context: context,
+                          fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: Color(0xff535A6C),
                         ),
@@ -86,7 +93,8 @@ class OpportunitiesDetailsScreen extends StatelessWidget {
                       Text(
                         '• Location: Grace Community Church',
                         style: getTextStyle(
-                          fontSize: 12,
+                          context: context,
+                          fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: Color(0xff535A6C),
                         ),
@@ -95,7 +103,8 @@ class OpportunitiesDetailsScreen extends StatelessWidget {
                       Text(
                         '• Date & Time: Saturday, 8:00 AM – 11:00\n\n\n AM (Morning Shift)',
                         style: getTextStyle(
-                          fontSize: 12,
+                          context: context,
+                          fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: Color(0xff535A6C),
                         ),
@@ -104,7 +113,8 @@ class OpportunitiesDetailsScreen extends StatelessWidget {
                       Text(
                         '• Address: 123 Main St, Springfield',
                         style: getTextStyle(
-                          fontSize: 12,
+                          context: context,
+                          fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: Color(0xff535A6C),
                         ),
@@ -134,6 +144,7 @@ class OpportunitiesDetailsScreen extends StatelessWidget {
                       Text(
                         '• You\'ll receive a confirmation email with\n\n\n details and reminders.',
                         style: getTextStyle(
+                          context: context,
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                           color: Color(0xff535A6C),
@@ -143,6 +154,7 @@ class OpportunitiesDetailsScreen extends StatelessWidget {
                       Text(
                         '• Please arrive 10 minutes early.',
                         style: getTextStyle(
+                          context: context,
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                           color: Color(0xff535A6C),
@@ -158,7 +170,9 @@ class OpportunitiesDetailsScreen extends StatelessWidget {
                   horizontal: 70,
                   isPadding: true,
                   buttonText: 'Back To Serve',
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(() => AllServingOpportunities());
+                  },
                   vertical: 20,
                 ),
               ],

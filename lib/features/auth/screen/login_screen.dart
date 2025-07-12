@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:tread256/core/utils/constants/colors.dart';
 import 'package:tread256/core/utils/constants/image_path.dart';
 import 'package:tread256/features/auth/controler/login_screen_controller.dart';
-import 'package:tread256/features/bottom_navbar/screen/bottom_navbar_screen.dart';
 import 'package:tread256/features/perosonal_tree/widgets/custom_button.dart';
 import 'package:tread256/routes/app_routes.dart';
 
@@ -20,13 +19,13 @@ class LoginScreen extends StatelessWidget {
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Form(
-              key: controller.formKey,
+              key: GlobalKey<FormState>(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    radius: 48,
-                    backgroundColor: const Color(0xFF5DBB9B),
+                    radius: 60,
+                    backgroundColor: Colors.transparent,
                     backgroundImage: AssetImage(ImagePath.component),
                   ),
                   const SizedBox(height: 23),
@@ -34,7 +33,7 @@ class LoginScreen extends StatelessWidget {
                   const Text(
                     'WELCOME TO SEEDS ',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF4CB28B),
                     ),
@@ -44,8 +43,12 @@ class LoginScreen extends StatelessWidget {
                   // Email Field
                   TextFormField(
                     controller: controller.emailController,
+
+                    style: const TextStyle(fontSize: 18),
                     decoration: InputDecoration(
                       labelText: 'Email Address',
+
+                      labelStyle: const TextStyle(fontSize: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -59,9 +62,9 @@ class LoginScreen extends StatelessWidget {
                       }
                       return null;
                     },
+                    textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 15),
-                  // Password Fieldddd
                   Obx(
                     () => TextFormField(
                       controller: controller.passwordController,
@@ -76,6 +79,7 @@ class LoginScreen extends StatelessWidget {
                             controller.obscurePassword.value
                                 ? Icons.visibility_off
                                 : Icons.visibility,
+                            color: const Color(0xFF4CB28B),
                           ),
                           onPressed: controller.togglePassword,
                         ),
@@ -86,8 +90,10 @@ class LoginScreen extends StatelessWidget {
                         }
                         return null;
                       },
+                      textInputAction: TextInputAction.done,
                     ),
                   ),
+                  // Password Fieldddd
                   const SizedBox(height: 15),
                   // Forgot Password
                   Align(
@@ -104,38 +110,10 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  // Login Button
-                  // GestureDetector(
-                  //   onTap: () async {
-                  //     await Get.to(BottomNavbarScreen());
-                  //   },
-                  //   child: Container(
-                  //     width: double.infinity,
-                  //     padding: const EdgeInsets.symmetric(
-                  //       vertical: 25,
-                  //       horizontal: 143,
-                  //     ),
-                  //     decoration: BoxDecoration(
-                  //       color: const Color(0xFF4CB28B),
-                  //       borderRadius: BorderRadius.circular(12),
-                  //     ),
-                  //     alignment: Alignment.center,
-                  //     child: Text(
-                  //       'Login',
-                  //       style: getTextStyle(
-                  //         fontSize: 16,
-                  //         color: Colors.white,
-                  //         fontWeight: FontWeight.bold,
-                  //       ),
-                  //       textAlign: TextAlign.center,
-                  //       overflow: TextOverflow.visible,
-                  //     ),
-                  //   ),
-                  // ),
                   CustomButtom(
                     buttonText: "Login",
                     onPressed: () async {
-                      await Get.to(BottomNavbarScreen());
+                      await controller.login();
                     },
                   ),
                   const SizedBox(height: 16),
@@ -143,15 +121,18 @@ class LoginScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Don't have an account? "),
+                      const Text(
+                        'Don\'t have an account? ',
+                        style: TextStyle(fontSize: 16),
+                      ),
                       GestureDetector(
                         onTap: () {
-                          // Get.to(ChatPage());
                           Get.toNamed(AppRoute.getCreateAccountScreen());
                         },
                         child: const Text(
-                          'Create now',
+                          'Create Account',
                           style: TextStyle(
+                            fontSize: 12,
                             color: Color(0xFF4CB28B),
                             fontWeight: FontWeight.bold,
                           ),
@@ -179,17 +160,25 @@ class LoginScreen extends StatelessWidget {
                       _socialButton(
                         Colors.white,
 
-                        () {
-                          // Google login logic
-                          // Get.toNamed(AppRoute.getYourCommunityTreeScreen());
+                        () async {
+                          final userCredential =
+                              await controller.signInWithGoogle();
+                          if (userCredential != null) {
+                            // Handle successful login, e.g., navigate to home screen
+                            print('Google sign-in successful!');
+                          } else {
+                            print(
+                              'Google sign-in was unsuccessful. Please try again.',
+                            );
+                          }
                         },
                         textIcon: "G",
                         isGoogle: true,
                       ),
-                      const SizedBox(width: 16),
-                      _socialButton(Colors.white, () {
-                        // Google login logic
-                      }, icon: Icons.apple),
+                      // const SizedBox(width: 16),
+                      // _socialButton(Colors.white, () {
+                      //   // Google login logic
+                      // }, icon: Icons.apple),
                       const SizedBox(width: 16),
                       _socialButton(
                         Colors.white,
