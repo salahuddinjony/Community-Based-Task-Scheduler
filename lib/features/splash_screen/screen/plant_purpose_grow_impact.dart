@@ -24,8 +24,8 @@ class PlantPurposeGrowImpact extends StatelessWidget {
                 const SizedBox(height: 32),
                 // Circular icon
                 CircleAvatar(
-                  radius: 36,
-                  backgroundColor: const Color(0xFF5DBB9B),
+                  radius: 70,
+                  backgroundColor: Colors.transparent,
                   backgroundImage: AssetImage(ImagePath.component),
                 ),
                 const SizedBox(height: 36),
@@ -33,6 +33,7 @@ class PlantPurposeGrowImpact extends StatelessWidget {
                 Text(
                   'Plant purpose. Grow impact.',
                   style: getTextStyleCabinCondensed(
+                    context: context,
                     color: Color(0xFF5DBB9B),
                     fontSize: 28,
                     fontWeight: FontWeight.w200,

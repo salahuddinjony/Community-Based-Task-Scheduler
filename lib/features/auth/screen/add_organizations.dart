@@ -4,6 +4,7 @@ import 'package:tread256/core/common/styles/global_text_style.dart';
 import 'package:tread256/core/utils/constants/colors.dart';
 import 'package:tread256/features/auth/controler/add_organizations_controller.dart';
 import 'package:tread256/features/bottom_navbar/screen/bottom_navbar_screen.dart';
+import 'package:tread256/core/utils/responsive.dart';
 
 class AddOrganizationsScreen extends StatelessWidget {
   AddOrganizationsScreen({super.key});
@@ -18,7 +19,7 @@ class AddOrganizationsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Add Organizations',
-          style: getTextStyle(color: Color(0xff535A6C)),
+          style: getTextStyle(context: context, color: Color(0xff535A6C)),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
@@ -31,7 +32,10 @@ class AddOrganizationsScreen extends StatelessWidget {
             onPressed: () {
               Get.to(BottomNavbarScreen());
             },
-            child: Text('Skip', style: getTextStyle(color: Color(0xFF4CB28B))),
+            child: Text(
+              'Skip',
+              style: getTextStyle(context: context, color: Color(0xFF4CB28B)),
+            ),
           ),
         ],
         centerTitle: true,
@@ -56,7 +60,11 @@ class AddOrganizationsScreen extends StatelessWidget {
               Text(
                 'Add friends, family, and organizations\n\nto your Trees to begin',
                 textAlign: TextAlign.center,
-                style: getTextStyle(color: Color(0xff666666), fontSize: 16),
+                style: getTextStyle(
+                  context: context,
+                  color: Color(0xff666666),
+                  fontSize: 16,
+                ),
               ),
               const SizedBox(height: 16),
               // Search bar
@@ -102,7 +110,10 @@ class AddOrganizationsScreen extends StatelessWidget {
                 child: Obx(
                   () => ListView.separated(
                     itemCount: controller.filteredOrganizations.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    separatorBuilder:
+                        (_, __) => SizedBox(
+                          height: Responsive.getResponsiveSpacing(context, 12),
+                        ),
                     itemBuilder: (context, index) {
                       final org = controller.filteredOrganizations[index];
 
@@ -112,9 +123,11 @@ class AddOrganizationsScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
                         ),
-                        padding: const EdgeInsets.all(
-                          12,
-                        ), // Add padding to the container
+                        padding: Responsive.getResponsivePadding(
+                          context,
+                          horizontal: 12,
+                          vertical: 12,
+                        ),
                         child: Column(
                           children: [
                             Row(
@@ -141,6 +154,7 @@ class AddOrganizationsScreen extends StatelessWidget {
                                   child: Text(
                                     org.name,
                                     style: getTextStyle(
+                                      context: context,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 15,
                                       color: const Color(0xff535A6C),

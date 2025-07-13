@@ -14,7 +14,6 @@ class BottomNavbarScreen extends StatelessWidget {
   BottomNavbarScreen({super.key});
 
   final BottomNavbarController controller = Get.put(BottomNavbarController());
-
   final List<Widget> screens = [
     MainHome(),
     IntentionsScreen(),
@@ -29,15 +28,17 @@ class BottomNavbarScreen extends StatelessWidget {
     ImagePath.profile,
   ];
 
-  final List<String> labels = ['Home', 'Intentions', 'Inspirations', 'Profile'];
+  final List<String> labels = ['Home', 'Intentions', 'Inspiration', 'Profile'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(child: Obx(() => screens[controller.selectedIndex.value])),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(child: Obx(() => screens[controller.selectedIndex.value])),
+          ],
+        ),
       ),
       bottomNavigationBar: Navbar(),
     );

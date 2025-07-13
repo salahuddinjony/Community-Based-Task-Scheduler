@@ -7,4 +7,5 @@ class ImagePath {
   static const String inspiration = 'assets/icons/inspiration.png';
   static const String intentions = 'assets/icons/intentions.png';
   static const String profile = 'assets/icons/profile.png';
+  static const String icon = 'assets/images/icon.png';
 }

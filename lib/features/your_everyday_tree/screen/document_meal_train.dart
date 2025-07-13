@@ -1,40 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tread256/core/common/styles/input_decoration.dart';
 import 'package:tread256/features/perosonal_tree/widgets/custom_button.dart';
-
-import 'meal_train_tocumentation.dart';
+import 'package:tread256/features/your_everyday_tree/controller/my_initiatives_controller.dart';
+import 'package:tread256/features/your_everyday_tree/screen/my_initiatives.dart';
+import 'package:tread256/features/your_everyday_tree/models/everyday_tree_create_initiative_model.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:tread256/features/your_everyday_tree/widgets/document_meal_train_widgets.dart';
+import 'package:tread256/features/your_everyday_tree/api_services/progress_overview_controller.dart';
 
 class DocumentMealTrainScreen extends StatelessWidget {
-  const DocumentMealTrainScreen({super.key});
+  final String initiativeId;
+
+  const DocumentMealTrainScreen({super.key, required this.initiativeId});
 
   @override
   Widget build(BuildContext context) {
-    // final borderRadius = BorderRadius.circular(8);
+    final MyInitiativesController controller =
+        Get.find<MyInitiativesController>();
+
+    // Form controllers
+    final TextEditingController whatWasAccomplishedController =
+        TextEditingController();
+    final TextEditingController whatDidYouLearnController =
+        TextEditingController();
+    final TextEditingController startTimeController = TextEditingController();
+    final TextEditingController endTimeController = TextEditingController();
     return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            backgroundColor: Color(0xffF2F4F5),
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.teal),
-              onPressed: () => Get.back(),
-            ),
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'Document Meal Train',
-          style: TextStyle(
-            color: Colors.teal,
-            fontSize: 22,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      appBar: buildDocumentHeader(title: 'Document Meal Train'),
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
@@ -42,90 +34,40 @@ class DocumentMealTrainScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 8),
-              const Text(
-                'Share Details And Outcomes Of Your Meal Train Initiative To Celebrate Your Impact.',
-                style: TextStyle(color: Colors.black54, fontSize: 15),
-                textAlign: TextAlign.center,
+              buildDocumentDescription(
+                description:
+                    'Share Details And Outcomes Of Your Meal Train Initiative To Celebrate Your Impact.',
               ),
-              const SizedBox(height: 24),
-              const Text(
-                'What was accomplished?',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                  color: Color(0xff535A6C),
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              TextFormField(
-                maxLines: 4,
-                decoration: CustomInputDecoration.customInputDecoration(
-                  hintText: 'Describe meals delivered, people helped....',
-                ),
-              ),
-
-              const SizedBox(height: 20),
-              const Text(
-                'Participants & Tags',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                  color: Color(0xff535A6C),
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              TextFormField(
-                maxLines: 1,
-                decoration: CustomInputDecoration.customInputDecoration(
-                  hintText: 'Describe meals delivered, people helped....',
-                  suffixIcon: Icon(
-                    Icons.group_outlined,
-                    color: Color(0xff535A6C),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Duration',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                  color: Color(0xff535A6C),
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                decoration: CustomInputDecoration.customInputDecoration(
-                  hintText: 'Share insights,or feedback...........',
-                  suffixIcon: Icon(Icons.access_time, color: Color(0xff535A6C)),
-                ),
+              buildAccomplishmentField(
+                controller: whatWasAccomplishedController,
               ),
               const SizedBox(height: 20),
-
-              const Text(
-                'What Did You Learn?',
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+              buildDurationSection(
+                startTimeController: startTimeController,
+                endTimeController: endTimeController,
+                context: context,
               ),
-              const SizedBox(height: 8),
-
-              TextFormField(
-                maxLines: 6,
-                decoration: CustomInputDecoration.customInputDecoration(
-                  hintText: 'Share insights,or feedback...........',
-                ),
-              ),
-
+              const SizedBox(height: 20),
+              buildLearningsField(controller: whatDidYouLearnController),
               SizedBox(height: 50),
-              CustomButtom(
-                buttonText: 'Save document',
-                onPressed: () {
-                  // print("hello flutter");
-                  Get.to(() => MealTrainDocumentationScreen());
-                },
-                vertical: 20,
+              Obx(
+                () => CustomButtom(
+                  buttonText:
+                      controller.isFetchingDetails.value
+                          ? 'Loading...'
+                          : 'Save document',
+                  onPressed:
+                      controller.isFetchingDetails.value
+                          ? null
+                          : () => saveDocument(
+                            controller,
+                            whatWasAccomplishedController,
+                            whatDidYouLearnController,
+                            startTimeController,
+                            endTimeController,
+                          ),
+                  vertical: 20,
+                ),
               ),
               const SizedBox(height: 16),
             ],
@@ -133,5 +75,44 @@ class DocumentMealTrainScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> saveDocument(
+    MyInitiativesController controller,
+    TextEditingController whatWasAccomplishedController,
+    TextEditingController whatDidYouLearnController,
+    TextEditingController startTimeController,
+    TextEditingController endTimeController,
+  ) async {
+    if (whatWasAccomplishedController.text.trim().isEmpty ||
+        whatDidYouLearnController.text.trim().isEmpty ||
+        startTimeController.text.trim().isEmpty ||
+        endTimeController.text.trim().isEmpty) {
+      EasyLoading.showError('Please fill all required fields');
+      return;
+    }
+
+    final request = InitiativeDocumentationRequest(
+      whatWasAccomplished: whatWasAccomplishedController.text.trim(),
+      startTime: startTimeController.text.trim(),
+      endTime: endTimeController.text.trim(),
+      whatDidYouLearn: whatDidYouLearnController.text.trim(),
+    );
+
+    EasyLoading.show(status: 'Saving document...');
+
+    final success = await controller.saveInitiativeDocumentation(
+      initiativeId,
+      request,
+    );
+
+    EasyLoading.dismiss();
+
+    if (success) {
+      // Refresh progress overview data for graphs/charts
+      final progressController = Get.find<ProgressOverviewController>();
+      await progressController.fetchProgressOverviewData();
+      Get.off(() => MyInitiativesScreen());
+    }
   }
 }

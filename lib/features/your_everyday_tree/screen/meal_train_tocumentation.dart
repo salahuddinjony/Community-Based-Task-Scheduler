@@ -1,253 +1,168 @@
 import 'package:flutter/material.dart';
-import 'package:tread256/features/perosonal_tree/widgets/custom_button.dart';
+import 'package:get/get.dart';
+import 'package:tread256/features/your_everyday_tree/controller/initiative_details_controller.dart';
+import 'package:tread256/core/utils/constants/colors.dart';
+import 'package:tread256/features/your_everyday_tree/widgets/documentation_widgets.dart';
+import 'package:tread256/core/common/widgets/shimmer_loading.dart';
 
 class MealTrainDocumentationScreen extends StatelessWidget {
-  const MealTrainDocumentationScreen({super.key});
+  final String initiativeId;
+  const MealTrainDocumentationScreen({super.key, required this.initiativeId});
 
   @override
   Widget build(BuildContext context) {
-    // Example URLs for demonstration; replace with your own if needed
+    final controller = Get.put(InitiativeDetailsController());
 
-    final bulletTexts = [
-      'Many Seniors Appreciated Not Just The Meals But Also The Brief Social Interaction.',
-      'Logistics (Like Parking And Route Planning) Can Significantly Impact Delivery Efficiency. Better To Group Nearby Addresses Together.',
-      'Some Recipients Mentioned Needing Additional Help With Pet Supplies. Potential Area For Future Outreach.',
-    ];
+    // Fetch data when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchInitiativeDetails(initiativeId);
+    });
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Meal Train Documentation',
-          style: TextStyle(
-            color: Colors.teal,
-            fontWeight: FontWeight.w600,
-            fontSize: 22,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            backgroundColor: Color(0xffF2F4F5),
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.teal),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ),
-        ),
-      ),
+      appBar: buildDocumentationHeader(title: 'Initiative Documentation'),
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Top spacing
-              const SizedBox(height: 12),
-              // // Title
-              // const Center(
-              //   child: Text(
-              //     'Meal Train Documentation',
-              //     style: TextStyle(
-              //       color: Color(0xFF2CB58D),
-              //       fontWeight: FontWeight.w600,
-              //       fontSize: 22,
-              //     ),
-              //   ),
-              // ),
-              // const SizedBox(height: 8),
-              // Subtitle
-              const Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    'Review the details and impact of your\n documented initiative below.',
-                    style: TextStyle(color: Colors.black54, fontSize: 15),
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  // Shimmer for subtitle
+                  const ShimmerText(height: 20, width: double.infinity),
+                  const SizedBox(height: 20),
+                  // Shimmer for summary card
+                  const ShimmerCard(
+                    height: 100,
+                    margin: EdgeInsets.only(bottom: 20),
+                  ),
+                  // Shimmer for participants section
+                  const ShimmerText(height: 16, width: 150),
+                  const SizedBox(height: 10),
+                  const ShimmerCard(
+                    height: 60,
+                    margin: EdgeInsets.only(bottom: 20),
+                  ),
+                  // Shimmer for time section
+                  const ShimmerCard(
+                    height: 40,
+                    margin: EdgeInsets.only(bottom: 20),
+                  ),
+                  // Shimmer for learnings section
+                  const ShimmerText(height: 16, width: 120),
+                  const SizedBox(height: 10),
+                  const ShimmerCard(
+                    height: 80,
+                    margin: EdgeInsets.only(bottom: 20),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          if (controller.errorMessage.value.isNotEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  SizedBox(height: 16),
+                  Text(
+                    'Error: ${controller.errorMessage.value}',
+                    style: TextStyle(color: Colors.red, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
-                ),
-              ),
-              const SizedBox(height: 18),
-              // Summary Card
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF6FAF8),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 18,
-                  horizontal: 14,
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE2F3EC),
-                        shape: BoxShape.circle,
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      child: Icon(
-                        Icons.lightbulb_outline,
-                        color: Color(0xFF2CB58D),
-                        size: 32,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Summary',
-                      style: TextStyle(
-                        color: Color(0xFF2CB58D),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Delivered 25 hot meals to elderly residents in the downtown area. Helped 10 families with grocery deliveries, including fresh produce and pantry staples. Assisted 3 homebound individuals with prescription pickups.',
-                      style: TextStyle(color: Color(0xff535A6C), fontSize: 15),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 22),
-              // Participants & Tags
-              const Text(
-                'Participants & Tags',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  color: Color(0xff535A6C),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Image.asset(
-                    "assets/icons/porson_icon.png",
-                    width: 20,
-                    height: 20,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'sarah lee, jamal carter, priya patel',
-                      style: TextStyle(fontSize: 14, color: Color(0xff535A6C)),
-                    ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed:
+                        () => controller.fetchInitiativeDetails(initiativeId),
+                    child: Text('Retry'),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              const Divider(height: 24, thickness: 1),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.access_time,
+            );
+          }
+
+          final details = controller.initiativeDetails.value;
+          if (details == null) {
+            return Center(
+              child: Text('No data available', style: TextStyle(fontSize: 16)),
+            );
+          }
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 12),
+                buildDocumentationSubtitle(
+                  subtitle:
+                      'Review the details and impact of your\n documented initiative below.',
+                ),
+                const SizedBox(height: 18),
+                buildDocumentationSummaryCard(
+                  summary: details.initiativeDetails.whatWasAccomplished,
+                ),
+                const SizedBox(height: 22),
+                const Text(
+                  'Participants & Tags',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
                     color: Color(0xff535A6C),
-                    size: 20,
                   ),
-                  const SizedBox(width: 8),
-
-                  const Text(
-                    '3 hours (10:00 am - 1:00 pm)',
-                    style: TextStyle(fontSize: 14, color: Color(0xff535A6C)),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              const Divider(height: 24, thickness: 1),
-              // What Did You Learn?
-              const Text(
-                'What Did You Learn?',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  color: Color(0xff535A6C),
                 ),
-              ),
-              const SizedBox(height: 10),
-              // Bullet List with links
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(bulletTexts.length, (i) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '• ',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Color(0xff535A6C),
-                          ),
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () async {
-                              // final url = bulletLinks[i];
-                              // if (await canLaunch(url)) {
-                              //   await launch(url);
-                              // }
-                            },
-                            child: Text(
-                              bulletTexts[i],
-                              style: const TextStyle(
-                                fontSize: 14.5,
-                                color: Color(0xFF535A6C),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              ),
-              const SizedBox(height: 30),
-
-              // Button
-              // Center(
-              //   child: SizedBox(
-              //     width: double.infinity,
-              //     child: ElevatedButton(
-              //       style: ElevatedButton.styleFrom(
-              //         backgroundColor: const Color(0xFF2CB58D),
-              //         padding: const EdgeInsets.symmetric(vertical: 14),
-              //         shape: RoundedRectangleBorder(
-              //           borderRadius: BorderRadius.circular(8),
-              //         ),
-              //       ),
-              //       onPressed: () {
-              //         // TODO: Add navigation logic
-              //       },
-              //       child: const Text(
-              //         'Return to Initiatives',
-              //         style: TextStyle(fontSize: 16, color: Colors.white),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // const SizedBox(height: 16),
-              SizedBox(height: 50),
-              CustomButtom(
-                buttonText: 'Return to Initiatives',
-                onPressed: () {
-                  // print("hello flutter");
-                  // Get.to(() => MealTrainDocumentationScreen());
-                },
-                vertical: 20,
-              ),
-            ],
-          ),
-        ),
+                const SizedBox(height: 10),
+                buildDocumentationParticipantsRow(
+                  participants:
+                      details.participants.isNotEmpty
+                          ? details.participants
+                              .map((p) => p.profile.name)
+                              .join(', ')
+                          : '',
+                ),
+                const SizedBox(height: 8),
+                const Divider(height: 24, thickness: 1),
+                buildDocumentationTimeRow(
+                  timeRange: _formatTimeRange(
+                    details.initiativeDetails.startTime,
+                    details.initiativeDetails.endTime,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Divider(height: 24, thickness: 1),
+                buildDocumentationLearningsSection(
+                  learnings: details.initiativeDetails.whatDidYouLearn,
+                ),
+                const SizedBox(height: 30),
+                buildDocumentationReturnButton(),
+                const SizedBox(height: 16),
+              ],
+            ),
+          );
+        }),
       ),
     );
+  }
+
+  String _formatTimeRange(String startTime, String endTime) {
+    try {
+      final start = DateTime.parse(startTime);
+      final end = DateTime.parse(endTime);
+      final duration = end.difference(start);
+      final hours = duration.inHours;
+      final minutes = duration.inMinutes % 60;
+
+      final startFormatted =
+          '${start.hour.toString().padLeft(2, '0')}:${start.minute.toString().padLeft(2, '0')}';
+      final endFormatted =
+          '${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}';
+
+      return '$hours hours $minutes minutes ($startFormatted - $endFormatted)';
+    } catch (e) {
+      return 'Time information unavailable';
+    }
   }
 }

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tread256/core/utils/constants/image_path.dart';
 import 'package:tread256/features/auth/controler/forgot_password_otp_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:tread256/routes/app_routes.dart';
 
 class ForgotPasswordOtpScreen extends StatelessWidget {
-  ForgotPasswordOtpScreen({super.key});
-
-  final ForgotPasswordOtpController controller = Get.put(
-    ForgotPasswordOtpController(),
-  );
+  final String email;
+  const ForgotPasswordOtpScreen({super.key, required this.email});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<ForgotPasswordOtpController>();
+    print(email);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -25,17 +25,9 @@ class ForgotPasswordOtpScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 32),
                   CircleAvatar(
-                    radius: 48,
-                    backgroundColor: const Color(0xFF4CB28B),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Image.asset(
-                        'assets/images/component.png', // Use your logo asset here
-                        fit: BoxFit.contain,
-                        width: 60,
-                        height: 60,
-                      ),
-                    ),
+                    radius: 60,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: AssetImage(ImagePath.component),
                   ),
                   const SizedBox(height: 24),
                   const Text(
@@ -47,8 +39,8 @@ class ForgotPasswordOtpScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'A 4-digit code was sent to\ntread256@email.com',
+                  Text(
+                    'A 4-digit code was sent to\n$email',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, color: Colors.black54),
                   ),
@@ -95,8 +87,10 @@ class ForgotPasswordOtpScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () {
-                        Get.toNamed(AppRoute.getAddOrganizationsScreen());
+                      onPressed: () async {
+                        // Get.toNamed(AppRoute.getLoginScreen());
+
+                        await controller.submitOtp(email);
                       },
                       child: const Text(
                         'Continue',

@@ -21,17 +21,21 @@ class SeedsApp extends StatelessWidget {
                 const SizedBox(height: 26),
                 // Logo (centered)
                 Center(
-                  child: Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE5F5EC),
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: AssetImage(ImagePath.component),
-                      ),
-                    ),
+                  child: CircleAvatar(
+                    radius: 70,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: AssetImage(ImagePath.component),
                   ),
+
+                  // child: Container(
+                  //   width: 80,
+                  //   height: 80,
+                  //   decoration: BoxDecoration(
+                  //     color: const Color(0xFFE5F5EC),
+                  //     shape: BoxShape.circle,
+                  //     image: DecorationImage(image: AssetImage(ImagePath.icon)),
+                  //   ),
+                  // ),
                 ),
                 const SizedBox(height: 26),
                 // Title

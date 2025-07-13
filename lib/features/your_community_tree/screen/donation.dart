@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:tread256/core/common/styles/global_text_style.dart';
 import 'package:tread256/features/perosonal_tree/widgets/custom_button.dart';
 import 'package:tread256/features/subscriptions/services/stripe_service.dart';
-import 'package:tread256/features/your_community_tree/screen/controller/community_tree_controller.dart';
+import 'package:tread256/features/your_community_tree/controller/community_tree_controller.dart';
 import '../../../core/common/styles/input_decoration.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class Donation extends StatelessWidget {
   Donation({super.key});
@@ -40,6 +41,7 @@ class Donation extends StatelessWidget {
               Text(
                 'Donation',
                 style: getTextStyle(
+                  context: context,
                   color: Color(0xff57B396),
                   fontWeight: FontWeight.w400,
                   fontSize: 28,
@@ -56,6 +58,7 @@ class Donation extends StatelessWidget {
               Text(
                 'Grace Community Church',
                 style: getTextStyle(
+                  context: context,
                   color: Color(0xff57B396),
                   fontWeight: FontWeight.w400,
                   fontSize: 20,
@@ -87,6 +90,7 @@ class Donation extends StatelessWidget {
                 controller: controller.amountController,
                 decoration: CustomInputDecoration.customInputDecoration(
                   hintStyle: getTextStyle(
+                    context: context,
                     color: Color(0x9E535A6C),
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
@@ -111,6 +115,7 @@ class Donation extends StatelessWidget {
                 decoration: CustomInputDecoration.customInputDecoration(
                   isSuffixIcon: true,
                   hintStyle: getTextStyle(
+                    context: context,
                     color: Color(0x9E535A6C),
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
@@ -133,7 +138,7 @@ class Donation extends StatelessWidget {
                         currency: 'usd',
                       );
                     } else {
-                      Get.snackbar("SORRY", "Your ammount is very low!");
+                      EasyLoading.showError("Your amount is very low!");
                     }
                   },
                 ),

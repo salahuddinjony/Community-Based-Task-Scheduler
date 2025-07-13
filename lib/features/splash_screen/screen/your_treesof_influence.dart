@@ -20,7 +20,7 @@ class YourTreesOfInfluence extends StatelessWidget {
               const SizedBox(height: 32),
               // Tree image
               Image.asset(
-                "assets/images/tree1.png", // <-- Replace with your asset path
+                "assets/images/tree1.png",
                 height: 250,
                 fit: BoxFit.contain,
               ),
@@ -103,8 +103,9 @@ class YourTreesOfInfluence extends StatelessWidget {
                 child: Text(
                   'Skip',
                   style: getTextStyle(
+                    context: context,
                     color: Color(0xFF4F4F4F),
-                    fontSize: 15,
+                    fontSize: 18,
                     fontWeight: FontWeight.w400,
                   ),
                 ),

@@ -20,8 +20,8 @@ class SplashWelcome extends StatelessWidget {
             children: [
               // Circular image
               CircleAvatar(
-                radius: 48,
-                backgroundColor: const Color(0xFF5DBB9B),
+                radius: 90,
+                backgroundColor: Colors.transparent,
                 backgroundImage: AssetImage(ImagePath.component),
               ),
               const SizedBox(height: 40),

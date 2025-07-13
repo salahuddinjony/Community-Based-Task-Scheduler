@@ -86,6 +86,7 @@ class IdeasLibraryScreen extends StatelessWidget {
                 Text(
                   idea['title'] as String,
                   style: getTextStyle(
+                    context: context,
                     color: AppColors.primary,
                     fontWeight: FontWeight.w400,
                     fontSize: 20,
@@ -96,6 +97,7 @@ class IdeasLibraryScreen extends StatelessWidget {
                 Text(
                   idea['subtitle'] as String,
                   style: getTextStyle(
+                    context: context,
                     color: Color(0xFF535A6C),
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
@@ -116,7 +118,7 @@ class IdeasLibraryScreen extends StatelessWidget {
                     ),
                     onPressed: () {
                       idea['status'] == 'active'
-                          ? null
+                          ? Get.to(() => LogEditAndDetails())
                           : Get.to(() => LogCrateAndDetailsScreen());
                     },
                     child: Row(
@@ -128,16 +130,11 @@ class IdeasLibraryScreen extends StatelessWidget {
                         ),
                         if (idea['status'] == 'active') ...[
                           const SizedBox(width: 4),
-                          InkWell(
-                            onTap: () {
-                              Get.to(() => LogEditAndDetails());
-                            },
-                            child: Image.asset(
-                              'assets/icons/edit_image.png',
-                              color: Colors.white,
-                              width: 20,
-                              height: 20,
-                            ),
+                          Image.asset(
+                            'assets/icons/edit_image.png',
+                            color: Colors.white,
+                            width: 20,
+                            height: 20,
                           ),
                         ],
                       ],

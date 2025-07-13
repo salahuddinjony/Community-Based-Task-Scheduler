@@ -32,6 +32,4 @@ class PrivacySecurityController extends GetxController {
         break;
     }
   }
-
-  // TODO: Add methods for Save Changes and Reset to Defaults
 }

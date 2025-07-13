@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tread256/core/utils/constants/image_path.dart';
 import 'package:tread256/features/auth/controler/forgot_password_controller.dart';
-import 'package:tread256/routes/app_routes.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
-  ForgotPasswordScreen({super.key});
-
-  final ForgotPasswordController controller = Get.put(
-    ForgotPasswordController(),
-  );
+  const ForgotPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<ForgotPasswordController>();
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -25,17 +22,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                   // Logo
                   const SizedBox(height: 32),
                   CircleAvatar(
-                    radius: 48,
-                    backgroundColor: const Color(0xFF4CB28B),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Image.asset(
-                        'assets/images/component.png', // Use your logo asset here
-                        fit: BoxFit.contain,
-                        width: 60,
-                        height: 60,
-                      ),
-                    ),
+                    radius: 60,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: AssetImage(ImagePath.component),
                   ),
                   const SizedBox(height: 24),
                   const Text(
@@ -93,7 +82,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Get.toNamed(AppRoute.getForgotPasswordOtpScreen());
+                        // Get.toNamed(AppRoute.getForgotPasswordOtpScreen());
+
+                        controller.sendCode();
                       },
                       child: const Text(
                         'Seed Code',

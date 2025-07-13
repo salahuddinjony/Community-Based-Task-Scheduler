@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:tread256/features/splash_screen/screen/your_community_tree.dart';
 import 'package:tread256/routes/app_routes.dart';
 

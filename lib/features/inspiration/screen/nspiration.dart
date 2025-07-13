@@ -27,14 +27,15 @@ class Nspiration extends StatelessWidget {
           Column(
             children: [
               CircleAvatar(
-                radius: 48,
-                backgroundColor: const Color(0xFF5DBB9B),
-                backgroundImage: AssetImage(ImagePath.component),
+                radius: 45,
+                backgroundColor: Colors.transparent,
+                backgroundImage: AssetImage(ImagePath.icon),
               ),
               const SizedBox(height: 12),
               Text(
                 'Seeds Inspiration',
                 style: getTextStyle(
+                  context: context,
                   color: AppColors.primary,
                   fontSize: 22,
                   fontWeight: FontWeight.w500,
@@ -164,6 +165,7 @@ class Nspiration extends StatelessWidget {
                                     child: Text(
                                       'Share',
                                       style: getTextStyle(
+                                        context: context,
                                         color: AppColors.primary,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 12,
